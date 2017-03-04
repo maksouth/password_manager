@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +105,6 @@ public class SQLiteRepository implements Repository {
         long rowID = database.insert(CREDENTIALS_TABLE_NAME, null, cv);
         if(rowID == -1) throw new Exception(ExceptionMessages.CANT_SAVE_TO_DB);
         item.setId(rowID);
-        writeChangesToJson(item, ADD_FLAG);
         return true;
     }
 
@@ -120,7 +118,6 @@ public class SQLiteRepository implements Repository {
 
         int rowsAffected = database.update(CREDENTIALS_TABLE_NAME, cv, ID_COLUMN+EQUALS+id, null);
         if(rowsAffected==0) throw new Exception(ExceptionMessages.NO_ITEMS_UPDATED);
-        writeChangesToJson(newValue, UPDATE_FLAG);
     }
 
     @Override
@@ -135,7 +132,6 @@ public class SQLiteRepository implements Repository {
 
         int itemsDeleted = database.update(CREDENTIALS_TABLE_NAME, cv, ID_COLUMN+EQUALS+id, null);
         if(itemsDeleted == 0) throw new Exception(ExceptionMessages.NO_ITEMS_DELETED);
-        writeChangesToJson(newValue, REMOVE_FLAG);
     }
 
     @Override
@@ -217,12 +213,6 @@ public class SQLiteRepository implements Repository {
         @Override
         public void onCreate(SQLiteDatabase db) {
             Log.d(LOG_TAG, "--- onCreate database ---");
-
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("drop table " + CREDENTIALS_TABLE_NAME);
             db.execSQL("create table " + CREDENTIALS_TABLE_NAME + " ("
                     + ID_COLUMN + " integer primary key autoincrement,"
                     + NAME_COLUMN + " text,"
@@ -230,52 +220,13 @@ public class SQLiteRepository implements Repository {
                     + PASSWORD_COLUMN + " text,"
                     + ADDRESS_COLUMN + " text,"
                     + DELETED_COLUMN + " boolean DEFAULT FALSE);");
+
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            db.execSQL("drop table " + CREDENTIALS_TABLE_NAME);
             Log.d(LOG_TAG, "Table CREDENTIALS updated");
         }
-    }
-
-    private static final String UPDATE_FLAG = "^^^";
-    private static final String REMOVE_FLAG = "---";
-    private static final String ADD_FLAG = "+++";
-    private static final String SPACE = " ";
-    private static final String NEW_LINE = "\n";
-    private static final String FILE_NAME = "items_change_history.txt";
-
-    private void writeChangesToJson(ItemCredentials item, String flag) throws IOException {
-        File file = new File(context.getFilesDir(), FILE_NAME);
-        file.delete();
-        Log.d(LOG_TAG, "File path: " + file.getCanonicalPath());
-        FileOutputStream outputStream = null;
-        FileInputStream fis;
-        Gson gson = new Gson();
-        String jsonItem = gson.toJson(item);
-        Log.d(LOG_TAG, "Logs " + flag + " " + jsonItem);
-        try{
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            outputStream = context.openFileOutput(FILE_NAME, MODE_APPEND);
-            outputStream.write((flag+SPACE+jsonItem + NEW_LINE).getBytes());
-
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String string;
-            while((string = br.readLine()) != null){
-                Log.d(LOG_TAG, "File read: " + string);
-            }
-            br.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                outputStream.flush();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 }
