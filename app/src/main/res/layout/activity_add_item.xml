@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:screenOrientation="portrait"
+    tools:context="com.example.maksouth.passwordmanager.AddItemActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/name_field"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="Name" />
+
+    <Button
+        android:text="SAVE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/login_field"
+        android:hint="Login"
+        android:layout_below="@+id/name_field"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_alignLeft="@+id/name_field"
+        android:layout_alignStart="@+id/name_field" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/password_field"
+        android:hint="Password"
+        android:layout_below="@+id/login_field"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/address_field"
+        android:hint="Address"
+        android:layout_below="@+id/password_field"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/address_field"
+        android:layout_alignLeft="@+id/address_field"
+        android:layout_alignStart="@+id/address_field"
+        android:layout_marginTop="14dp"
+        android:id="@+id/status_text"
+        android:layout_alignRight="@+id/address_field"
+        android:layout_alignEnd="@+id/address_field"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_red_light" />
+</RelativeLayout>
